@@ -24,7 +24,7 @@ import userRouter from '../src/routes/user.router.js'
 
 
 // routes declaration
-app.use('/user',userRouter);
+app.use('/winxp/user',userRouter);
 
 
 export {app}

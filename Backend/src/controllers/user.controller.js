@@ -20,10 +20,10 @@ const generateAccessAndRefreshToken = async function (user){
 }
 
 const registerUser = async function(req,res){
-
+     
      const {userName,email,password} = req.body
 
-     if(!userName.trim()){
+     if(!userName){
           throw new Apierror(400,"Username is required")
      }
      if(!email){
@@ -64,7 +64,7 @@ const registerUser = async function(req,res){
 }
 
 const loginUser = async function(req,res){
-     
+          
           const {userName,password} = req.body
           if(!userName.trim() || !password.trim()){
                throw new Apierror(400,"username and password required")
@@ -74,14 +74,14 @@ const loginUser = async function(req,res){
          
           console.log(user)
          if(!user){
-               throw new Apierror(404,"Unauthorized access")
+               throw new Apierror(401,"Unauthorized access")
          }
          console.log(user)
 
         const isPassCorrect =  await user.isPasswordCorrect(password)
 
          if(!isPassCorrect){
-          throw new Apierror(404,"Incorrect password")
+          throw new Apierror(401,"Incorrect password")
          }
 
          const {refreshToken,accessToken} = await generateAccessAndRefreshToken(user)

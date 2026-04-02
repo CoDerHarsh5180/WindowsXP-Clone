@@ -1,16 +1,55 @@
-import React from 'react'
+import React,{useState,useRef} from 'react'
 import { logo } from '../assets/assest'
 import { useNavigate } from 'react-router-dom'
-
+import axios from 'axios'
+import { useEffect } from 'react'
 
 
 const Login = () => {
 
 const Navigate = useNavigate()
-const handleRegister = (e)=>{
+const [userName,setuserName] = useState('')
+const [password,setpassword] = useState('')
+
+const moveToRegister = (e)=>{
+     e.preventDefault()
      Navigate('/register')
 }
+const updateuserName= (e)=>{
+     setuserName(e.target.value)
+}
+
+
+const handleLogin =async (e)=>{
+     
+     e.preventDefault()
+     const formdata = document.getElementById('loginForm')
+     const data = Object.fromEntries( new FormData(formdata));
+     console.log(data)
+     try{
+          const response = await  axios.post('/winxp/user/login',formdata)
+          console.log(response.data)
+          Navigate('/welcome',{replace:true})
+     }
+     catch(error){
+
+          if(error.response){
+               console.log(error.response.status);
+               console.log(error.response.data);
+          }
+          window.alert("Incorrect Username of password!")
+     }
+}
+
+const handleClear = (e)=>{
+     e.preventDefault();
+     setpassword('')
+     setuserName('')
+}
+
+
   return (
+     
     <div className=' w-screen h-screen  bg-blue-600 flex items-center justify-center'>
           <div className=' md:w-240  w-full border-6 border-blue-700 rounded-xl'>
                <div className='p-2 bg-[linear-gradient(var(--xp-gradient))] text-white text-2xl'>Log On to Windows</div>
@@ -27,19 +66,22 @@ const handleRegister = (e)=>{
                
                </div>
                <div  className='bg-yellow-50 p-4 py-12'>
-                    <form className='flex flex-col gap-4'>
+                    <form id='loginForm' className='flex flex-col gap-4'>
                          <div className=' flex gap-8'>
                               <label htmlFor='username'>Username: </label>
-                              <input className='bg-white border-black border rounded-xs px-1 w-[50%]' id='username' type='text' placeholder='Username...' name='username' required autoComplete='true' ></input>
+                              <input onChange={updateuserName} value={userName} className='bg-white border-black border rounded-xs px-1 w-[50%]' id='username' type='text' placeholder='Username...' name='userName' required autoComplete='true' ></input>
                          </div>
                          <div className=' flex gap-8'>
                               <label htmlFor='password'>password: </label>
-                              <input  className='bg-white border-black border rounded-xs px-1 w-[50%]' id='password' type='password' placeholder='password...' name='password' required autoComplete='true'></input>
+                              <input onChange={(e)=>{
+                                   setpassword(e.target.value)
+                              } } value={password} className='bg-white border-black border rounded-xs px-1 w-[50%]' id='password' type='password' placeholder='password...' name='password' required autoComplete='true'></input>
+
                          </div>
                          <div className='flex flex-row justify-evenly'>
-                              <button className='bg-white min-w-24 border '>OK</button>
-                              <button className='bg-white min-w-24 border '>Cancel...</button>
-                              <button onClick={handleRegister} className='bg-white min-w-24 border '>Register...</button>
+                              <button onClick={handleLogin}  className='bg-white min-w-24 border '>OK</button>
+                              <button onClick={handleClear} className='bg-white min-w-24 border '>Clear...</button>
+                              <button onClick={moveToRegister} className='bg-white min-w-24 border '>Register...</button>
                          </div>
                     </form>
                </div>
