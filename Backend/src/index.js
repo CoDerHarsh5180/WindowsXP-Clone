@@ -1,14 +1,14 @@
+// At the top of your index.js
+import dotenv from "dotenv";
+dotenv.config({ path: './.env' });
+import mongoose from "mongoose";
+import connectDB from "./db/index.js";
+import { app } from "./app.js";
 
-import dotenv from 'dotenv'
-dotenv.config({path:'./.env'})
-import { app } from './app.js'
-import connectDB from './db/index.js'
-
-
-app.get('/',(req,res)=>{
-     res.send("Hello i am backend server ")
+app.get('/', (req,res)=>{
+     res.send("working");
 })
-
-app.listen(process.env.PORT)
-
+app.listen(process.env.PORT,()=>{
+     console.log("server is running at",process.env.PORT)
+})
 connectDB()
